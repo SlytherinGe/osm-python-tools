@@ -7,6 +7,7 @@ import urllib.request
 
 import OSMPythonTools
 from OSMPythonTools.cachingStrategy import CachingStrategy
+from retry import retry
 
 class CacheObject:
     def __init__(self, prefix, endpoint, waitBetweenQueries=None, jsonResult=True, userAgent=None):
@@ -17,6 +18,7 @@ class CacheObject:
         self.__jsonResult = jsonResult
         self.__userAgentProvidedByUser = userAgent
     
+    @retry(Exception, tries=3, delay=1, backoff=2, max_delay=10, jitter=(0, 2))
     def query(self, *args, onlyCached=False, shallow=False, **kwargs):
         queryString, hashString, params = self._queryString(*args, **kwargs)
         key = self._prefix + '-' + self.__hash(hashString + ('????' + urllib.parse.urlencode(sorted(params.items())) if params else ''))

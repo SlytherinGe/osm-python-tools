@@ -1,7 +1,8 @@
 from OSMPythonTools.cachingStrategy import JSON
+from OSMPythonTools.cachingStrategy import Pickle
 
 class CachingStrategy():
-    __strategy = JSON()
+    __strategy = Pickle()
     @classmethod
     def use(cls, strategy, **kwargs):
         cls.__strategy.close()
