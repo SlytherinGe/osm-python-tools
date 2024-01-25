@@ -97,10 +97,12 @@ class CacheObject:
             response = urllib.request.urlopen(request)
         except urllib.request.HTTPError as err:
             msg = 'The requested data could not be downloaded. ' + str(err)
+            msg += '\nEndpoint: %s\nRequest: %s\nParams: %s' % (self._endpoint, requestString, params)
             OSMPythonTools.logger.exception(msg)
             raise Exception(msg, err)
         except Exception as err:
             msg = 'The requested data could not be downloaded.  Please check whether your internet connection is working.'
+            msg += '\nEndpoint: %s\nRequest: %s\nParams: %s' % (self._endpoint, requestString, params)
             OSMPythonTools.logger.exception(msg)
             raise Exception(msg, err)
         encoding = response.info().get_content_charset('utf-8')
